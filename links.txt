@@ -1,0 +1,8 @@
+https://www.pololu.com/product/3119 | The astar board itself. 
+https://www.pololu.com/docs/pdf/0J66/a-star_32u4_robot_controller.pdf | The manual for the board Astar motor. 
+https://www.pololu.com/blog/577/building-a-raspberry-pi-robot-with-the-a-star-32u4-robot-controller | A really useful example quickstart project. 
+https://www.pololu.com/product/2598 | The motor encoders we use 
+https://github.com/pololu/a-star-32u4-arduino-library | The library needed for the board
+https://www.pololu.com/docs/0J61/6.2 | How to install the board information
+https://www.pololu.com/docs/0J61/6.1 | Windows drivers install
+https://github.com/pololu/pololu-rpi-slave-arduino-library | The library which provides the I2C bridge with the pi and astar.
