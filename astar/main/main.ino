@@ -35,24 +35,77 @@ struct Data
 
   bool playNotes;
   char notes[14];
-  int16_t coolmeme, bettermeme;
   int16_t leftEncoder, rightEncoder;
+  
 };
 
-PololuRPiSlave<struct Data, 5> slave;
+PololuRPiSlave<struct Data, 20> slave;
 PololuBuzzer buzzer;
 AStar32U4Motors motors;
 AStar32U4ButtonA buttonA;
 AStar32U4ButtonB buttonB;
 AStar32U4ButtonC buttonC;
 
+volatile int encoderOneCount = 0;
+void readEncoderOne() {
+    if (digitalRead(0) == HIGH) {
+        if (digitalRead(7) == LOW) {
+            encoderOneCount = encoderOneCount + 1;
+        }
+        else {
+            encoderOneCount = encoderOneCount - 1;
+        }
+    }
+    else {
+        if (digitalRead(7) == HIGH) {
+            encoderOneCount = encoderOneCount + 1;
+        }
+        else {
+            encoderOneCount = encoderOneCount - 1;
+        }
+    }
+}
+
+volatile int encoderTwoCount = 0;
+void readEncoderTwo() {
+    if (digitalRead(1) == HIGH) {
+        if (digitalRead(8) == LOW) {
+            encoderTwoCount = encoderTwoCount + 1;
+        }
+        else {
+            encoderTwoCount = encoderTwoCount - 1;
+        }
+    }
+    else {
+        if (digitalRead(8) == HIGH) {
+            encoderTwoCount = encoderTwoCount + 1;
+        }
+        else {
+            encoderTwoCount = encoderTwoCount - 1;
+        }
+    }
+}
+
 void setup()
 {
   // Set up the slave at I2C address 20.
   slave.init(20);
+  
+  //encoder 1 on pins 0 and 7
+  pinMode(0, INPUT);
+  digitalWrite(0, HIGH);
+  pinMode(7, INPUT);
+  digitalWrite(7, HIGH);
 
-  // Play startup sound.
-  buzzer.play("v10>>g16>>>c16");
+  //encoder 2 on pins 1 and 8
+  pinMode(1, INPUT);
+  digitalWrite(1, HIGH);
+  pinMode(8, INPUT);
+  digitalWrite(8, HIGH);
+
+  attachInterrupt(digitalPinToInterrupt(0), readEncoderOne, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(1), readEncoderTwo, CHANGE);
+    
 }
 
 void loop()
@@ -94,19 +147,9 @@ void loop()
     slave.buffer.playNotes = false;
     startedPlaying = false;
   }
-
-  slave.buffer.coolmeme = 12;
-  slave.buffer.bettermeme = 15;
-
-
-  slave.buffer.leftEncoder = 159;
-  slave.buffer.rightEncoder = 100;
   
-  Serial.print(slave.buffer.leftEncoder);
-  Serial.print("\n");
-
-
-  // When you are done WRITING, call finalizeWrites() to make modified
-  // data available to I2C master.
+  slave.buffer.rightEncoder = encoderTwoCount;
+  slave.buffer.leftEncoder = encoderOneCount;
+  
   slave.finalizeWrites();
 }
