@@ -39,7 +39,7 @@ struct Data
   
 };
 
-PololuRPiSlave<struct Data, 20> slave;
+PololuRPiSlave<struct Data, 5> slave; //Set this to either 5 or 20. Depends if you are getting data misreads... I forget what its supposed to be set too. 
 PololuBuzzer buzzer;
 AStar32U4Motors motors;
 AStar32U4ButtonA buttonA;
